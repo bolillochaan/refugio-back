@@ -1,20 +1,17 @@
 FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
+COPY . .
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Instalar cliente PostgreSQL para verificación
-RUN apk add --no-cache postgresql-client
-
+# Copia el JAR
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget --quiet --tries=1 --spider http://localhost:${PORT:-8080}/api/actuator/health || exit 1
 
-# Comando de verificación previa
-CMD psql "${SPRING_DATASOURCE_URL#jdbc:postgresql://}" -c "\q" && \
-    java -jar app.jar || \
-    (echo "Falló la verificación de conexión"; sleep 3600)
+EXPOSE ${PORT:-8080}
+ENTRYPOINT ["java", "-jar", "app.jar"]
