@@ -111,6 +111,13 @@
 
 </dependency>
 
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.6.0</version> <!-- Versión certificada para YugabyteDB -->
+</dependency>
+
+
  <dependency>
         <groupId>org.modelmapper</groupId>
         <artifactId>modelmapper</artifactId>
