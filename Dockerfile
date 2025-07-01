@@ -3,7 +3,7 @@ WORKDIR /app
 
 # Copia todos los archivos necesarios para mvnw
 COPY mvnw .
-COPY .mvn .mvn
+
 COPY pom.xml .
 COPY src ./src
 
