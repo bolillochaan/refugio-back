@@ -1,8 +1,16 @@
-﻿FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
+FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
 WORKDIR /app
+
+# Copia todos los archivos necesarios para mvnw
+COPY mvnw .
+COPY .mvn .mvn
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean package -DskipTests
+
+# Da permisos de ejecución al wrapper
+RUN chmod +x mvnw
+
+RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
