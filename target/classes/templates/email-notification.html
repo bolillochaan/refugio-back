@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <h1>Notificación de <span th:text="${action}"></span> de animal</h1>
+    <p>Se ha realizado la <span th:text="${action}"></span> del animal:</p>
+    
+    <ul>
+        <li>Nombre: <span th:text="${animal.nombre}"></span></li>
+        <li>Especie: <span th:text="${animal.especie}"></span></li>
+        <li>Raza: <span th:text="${animal.raza}"></span></li>
+        <li>Estado de salud: <span th:text="${animal.estadoSalud}"></span></li>
+    </ul>
+    
+    <p>Fecha de operación: <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}"></span></p>
+</body>
+</html>

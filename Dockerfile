@@ -1,17 +1,17 @@
-FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
+﻿FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY . .
+COPY pom.xml .
+COPY src ./src
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Copia el JAR
+# Crea directorio y copia certificado con permisos correctos
+RUN mkdir -p /app/certs
+COPY src/main/resources/ssl/root.crt /app/certs/
+RUN chmod 644 /app/certs/root.crt
+
 COPY --from=build /app/target/*.jar app.jar
-
-# Health check que no requiere psql
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD wget --quiet --tries=1 --spider http://localhost:8080/api/actuator/health || exit 1
-
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

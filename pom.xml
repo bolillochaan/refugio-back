@@ -49,12 +49,7 @@
     <artifactId>spring-boot-starter-thymeleaf</artifactId>
 </dependency>
 
-<!-- Dependencia principal para JavaMail -->
-<dependency>
-    <groupId>com.sun.mail</groupId>
-    <artifactId>javax.mail</artifactId>
-    <version>1.6.2</version>
-</dependency>
+
 
 <!-- O mejor, usa la versión integrada con Spring Boot -->
 <dependency>
@@ -90,11 +85,12 @@
 
 
 </dependency>
+	<!-- Email Support - SOLO UNA VEZ (incluye todo lo necesario) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-mail</artifactId>
-</dependency>
 
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -116,6 +112,7 @@
     <artifactId>postgresql</artifactId>
     <version>42.6.0</version> <!-- Versión certificada para YugabyteDB -->
 </dependency>
+
 
 
  <dependency>
