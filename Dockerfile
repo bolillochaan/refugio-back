@@ -9,7 +9,7 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Copiar certificado
+# Crear directorio y copiar certificado con permisos
 RUN mkdir -p /app/certs
 COPY src/main/resources/ssl/root.crt /app/certs/
 RUN chmod 644 /app/certs/root.crt
