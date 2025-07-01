@@ -6,12 +6,12 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Crea directorio para certificados (Render montará el secret file aquí)
-RUN mkdir -p /app/certs
-
 # Copia el JAR
 COPY --from=build /app/target/*.jar app.jar
 
-# Puerto y entrypoint
+# Health check que no requiere psql
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget --quiet --tries=1 --spider http://localhost:8080/api/actuator/health || exit 1
+
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
