@@ -1,26 +1,17 @@
-# Usar OpenJDK 17 como base
-FROM openjdk:17-jdk-slim
+﻿FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Instalar curl para descargar certificados
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
-# Crear directorio para certificados
-RUN mkdir -p /app/certs
-
-# Descargar certificado de YugabyteDB
-RUN curl -o /app/certs/root.crt https://s3.us-west-2.amazonaws.com/downloads.yugabyte.com/certs/root.crt
-
-# Establecer directorio de trabajo
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Copiar el JAR construido
-COPY target/*.jar app.jar
+# Crea directorio y copia certificado con permisos correctos
+RUN mkdir -p /app/certs
+COPY src/main/resources/ssl/root.crt /app/certs/
+RUN chmod 644 /app/certs/root.crt
 
-# Exponer el puerto
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Variables de entorno por defecto
-ENV SPRING_PROFILES_ACTIVE=prod
-
-# Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -203,4 +203,33 @@ public class TestController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
+    /**
+     * Endpoint de health check para Render
+     */
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, Object>> healthCheck() {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Verificar conexión a la base de datos
+            long animalCount = animalRepository.count();
+            
+            response.put("status", "UP");
+            response.put("timestamp", System.currentTimeMillis());
+            response.put("database", "CONNECTED");
+            response.put("animalCount", animalCount);
+            response.put("message", "Servicio funcionando correctamente");
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            response.put("status", "DOWN");
+            response.put("timestamp", System.currentTimeMillis());
+            response.put("database", "DISCONNECTED");
+            response.put("error", e.getMessage());
+            
+            return ResponseEntity.status(503).body(response);
+        }
+    }
 }
