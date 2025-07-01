@@ -1,0 +1,16 @@
+target/
+.git/
+.gitignore
+README.md
+.mvn/
+mvnw
+mvnw.cmd
+Dockerfile
+.dockerignore
+*.md
+.env
+.env.local
+.DS_Store
+node_modules/
+.vscode/
+.idea/
